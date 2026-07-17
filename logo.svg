@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="EcuastreamX">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7c3aed"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="120" fill="#070816"/>
+  <rect x="32" y="32" width="448" height="448" rx="104" fill="url(#g)" opacity=".22"/>
+  <path d="M126 145h178v58H190v47h104v56H190v55h120v58H126V145Z" fill="#fff"/>
+  <path d="m326 205 35 52 35-52h68l-69 99 73 108h-70l-39-59-40 59h-68l73-106-68-101h70Z" fill="#fff"/>
+</svg>

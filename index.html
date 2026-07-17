@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Panel privado de gestión de EcuastreamX">
+  <link rel="icon" href="/logo.svg" type="image/svg+xml">
+
+  <title>EcuastreamX | Panel de control</title>
+
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <main id="loginView" class="login-screen">
+    <section class="login-card">
+      <div class="logo-wrap">
+        <img class="app-logo" id="loginLogo" alt="Logo">
+      </div>
+
+      <h1>EcuastreamX</h1>
+      <p class="login-subtitle">
+        Control de clientes, pagos, vencimientos, plataformas e ingresos.
+      </p>
+
+      <div class="input-group">
+        <label>Usuario</label>
+        <input type="text" id="loginUser" placeholder="Ingresa tu usuario">
+      </div>
+
+      <div class="input-group">
+        <label>Contraseña</label>
+        <input type="password" id="loginPass" placeholder="Ingresa tu contraseña">
+      </div>
+
+      <button class="btn primary full" id="btnLogin">
+        Entrar al panel
+      </button>
+
+      <p id="loginMsg" class="msg"></p>
+    </section>
+  </main>
+
+
+  <main id="appView" class="app hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="app-logo mini" id="sidebarLogo" alt="Logo">
+        <div>
+          <h2>EcuastreamX</h2>
+          <span id="userLabel">Admin</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+        <button class="nav-btn" data-section="registroPagos">Registrar pago</button>
+        <button class="nav-btn" data-section="registroGastos">Registrar gasto</button>
+        <button class="nav-btn" data-section="porVencer">Por vencer</button>
+        <button class="nav-btn" data-section="vencidos">Vencidos</button>
+        <button class="nav-btn" data-section="ultimos">Últimos pagos</button>
+        <button class="nav-btn" data-section="ultimosGastos">Últimos gastos</button>
+        <button class="nav-btn" data-section="plataformas">Plataformas</button>
+      </nav>
+
+      <button class="btn danger ghost" id="btnSalir">Cerrar sesión</button>
+    </aside>
+
+
+    <section class="content">
+      <header class="topbar">
+        <div>
+          <h1 id="tituloSeccion">Dashboard</h1>
+          <p>Resumen automático de tus plataformas digitales.</p>
+        </div>
+
+        <button class="btn secondary" id="btnActualizar">
+          Actualizar
+        </button>
+      </header>
+
+
+      <section class="section active" id="dashboard">
+        <div class="cards">
+          <article class="card glass">
+            <span>Ingresos del mes</span>
+            <h2 id="cardIngresos">$0.00</h2>
+          </article>
+
+          <article class="card glass">
+            <span>Gastos del mes</span>
+            <h2 id="cardGastos">$0.00</h2>
+          </article>
+
+          <article class="card glass highlight">
+            <span>Neto mensual</span>
+            <h2 id="cardNeto">$0.00</h2>
+          </article>
+
+          <article class="card glass">
+            <span>Clientes activos</span>
+            <h2 id="cardActivos">0</h2>
+          </article>
+
+          <article class="card glass warning">
+            <span>Por vencer</span>
+            <h2 id="cardPorVencer">0</h2>
+          </article>
+
+          <article class="card glass danger-card">
+            <span>Vencidos</span>
+            <h2 id="cardVencidos">0</h2>
+          </article>
+        </div>
+
+        <div class="grid-2">
+          <article class="panel">
+            <div class="panel-header">
+              <h3>Ingresos por plataforma</h3>
+              <span id="mesActual"></span>
+            </div>
+
+            <div id="platformBars" class="bars"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <h3>Vencimientos cercanos</h3>
+              <span>Prioridad</span>
+            </div>
+
+            <div class="table-wrap small-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cliente</th>
+                    <th>Plataforma</th>
+                    <th>Días</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="miniPorVencer"></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+      </section>
+
+
+      <section class="section" id="registroPagos">
+        <article class="panel">
+          <div class="panel-header">
+            <h3>Registrar pago</h3>
+            <span>Se guarda en resumen mensual automáticamente</span>
+          </div>
+
+          <form id="formPago" class="form-grid">
+            <input type="hidden" id="editPagoId">
+
+            <div class="input-group">
+              <label>Fecha de pago</label>
+              <input type="date" id="fechaPago">
+            </div>
+
+            <div class="input-group">
+              <label>Usuario / Cliente</label>
+              <input type="text" id="usuario" placeholder="Ej: Juan Pérez" required>
+            </div>
+
+            <div class="input-group">
+              <label>Plataforma</label>
+              <select id="plataforma" required>
+                <option value="">Selecciona</option>
+                <option>Netflix</option>
+                <option>Spotify</option>
+                <option>Disney Standard</option>
+                <option>Disney ESPN</option>
+                <option>Max</option>
+                <option>Prime Video</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label>Tipo</label>
+              <input type="text" id="tipo" placeholder="Ej: Perfil, cuenta, familiar">
+            </div>
+
+            <div class="input-group">
+              <label>Teléfono</label>
+              <input type="text" id="telefono" placeholder="Ej: 0999999999" required>
+            </div>
+
+            <div class="input-group">
+              <label>Cantidad de meses</label>
+              <input type="number" id="meses" min="1" value="1" required>
+            </div>
+
+            <div class="input-group">
+              <label>Cuánto pagó</label>
+              <input type="number" id="montoPagado" min="0" step="0.01" placeholder="Ej: 5" required>
+            </div>
+
+            <div class="input-group">
+              <label>Fecha de inicio</label>
+              <input type="date" id="fechaInicio">
+            </div>
+
+            <div class="input-group wide">
+              <label>Observación</label>
+              <textarea id="observacion" placeholder="Detalle extra del cliente o servicio"></textarea>
+            </div>
+
+            <button class="btn primary" type="submit" id="btnGuardarPago">
+              Guardar pago
+            </button>
+
+            <button class="btn secondary hidden" type="button" id="btnCancelarEdicionPago">
+              Cancelar edición
+            </button>
+          </form>
+
+          <p id="msgPago" class="msg"></p>
+        </article>
+      </section>
+
+
+      <section class="section" id="registroGastos">
+        <article class="panel">
+          <div class="panel-header">
+            <h3>Registrar gasto</h3>
+            <span>Se resta del neto mensual</span>
+          </div>
+
+          <form id="formGasto" class="form-grid">
+            <input type="hidden" id="editGastoId">
+
+            <div class="input-group">
+              <label>Fecha</label>
+              <input type="date" id="fechaGasto">
+            </div>
+
+            <div class="input-group">
+              <label>Categoría</label>
+              <select id="categoriaGasto">
+                <option>Compra de cuenta</option>
+                <option>Proveedor</option>
+                <option>Reposición</option>
+                <option>Publicidad</option>
+                <option>Comisión</option>
+                <option>Garantía</option>
+                <option>Otro</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label>Plataforma</label>
+              <select id="plataformaGasto">
+                <option>General</option>
+                <option>Netflix</option>
+                <option>Spotify</option>
+                <option>Disney Standard</option>
+                <option>Disney ESPN</option>
+                <option>Max</option>
+                <option>Prime Video</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label>Monto</label>
+              <input type="number" id="montoGasto" min="0" step="0.01" placeholder="Ej: 10">
+            </div>
+
+            <div class="input-group wide">
+              <label>Descripción</label>
+              <textarea id="descripcionGasto" placeholder="Ej: Pago a proveedor de Netflix"></textarea>
+            </div>
+
+            <button class="btn primary" type="submit" id="btnGuardarGasto">
+              Guardar gasto
+            </button>
+
+            <button class="btn secondary hidden" type="button" id="btnCancelarEdicionGasto">
+              Cancelar edición
+            </button>
+          </form>
+
+          <p id="msgGasto" class="msg"></p>
+        </article>
+      </section>
+
+
+      <section class="section" id="porVencer">
+        <article class="panel">
+          <div class="panel-header">
+            <h3>Clientes por vencer</h3>
+            <span>De 1 a 7 días restantes</span>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Plataforma</th>
+                  <th>Tipo</th>
+                  <th>Teléfono</th>
+                  <th>Corte</th>
+                  <th>Días</th>
+                  <th>Monto</th>
+                  <th>WhatsApp</th>
+                </tr>
+              </thead>
+              <tbody id="tablaPorVencer"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+
+      <section class="section" id="vencidos">
+        <article class="panel">
+          <div class="panel-header">
+            <h3>Clientes vencidos</h3>
+            <span>0 días o fecha de corte pasada</span>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Plataforma</th>
+                  <th>Tipo</th>
+                  <th>Teléfono</th>
+                  <th>Corte</th>
+                  <th>Días</th>
+                  <th>Estado</th>
+                  <th>Monto</th>
+                  <th>WhatsApp</th>
+                </tr>
+              </thead>
+              <tbody id="tablaVencidos"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+
+      <section class="section" id="ultimos">
+        <article class="panel">
+          <div class="panel-header">
+            <h3>Últimos pagos registrados</h3>
+            <span>Historial reciente</span>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Cliente</th>
+                  <th>Plataforma</th>
+                  <th>Tipo</th>
+                  <th>Meses</th>
+                  <th>Corte</th>
+                  <th>Días</th>
+                  <th>Monto</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tablaUltimos"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+
+      <section class="section" id="ultimosGastos">
+        <article class="panel">
+          <div class="panel-header">
+            <h3>Últimos gastos registrados</h3>
+            <span>Historial reciente de egresos</span>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Categoría</th>
+                  <th>Plataforma</th>
+                  <th>Descripción</th>
+                  <th>Monto</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tablaUltimosGastos"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+
+      <section class="section" id="plataformas">
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>Plataformas</h3>
+              <span>Netflix 5 espacios / Spotify cuenta familiar + 5 espacios</span>
+            </div>
+          </div>
+
+          <div class="platform-create-row">
+            <div class="input-group">
+              <label>Selecciona plataforma</label>
+              <select id="selectNuevaPlataforma">
+                <option>Netflix</option>
+                <option>Spotify</option>
+                <option>Disney Standard</option>
+                <option>Disney ESPN</option>
+                <option>Max</option>
+                <option>Prime Video</option>
+              </select>
+            </div>
+
+            <button class="btn primary" type="button" id="btnAgregarCuenta">
+              Agregar cuenta
+            </button>
+          </div>
+
+          <div id="editorGrupo" class="group-editor hidden">
+            <div class="panel-header">
+              <h3 id="tituloEditorGrupo">Nuevo grupo</h3>
+              <span>Rellena los espacios y guarda el grupo completo</span>
+            </div>
+
+            <form id="formGrupoPlataforma">
+              <input type="hidden" id="editandoGrupo">
+              <input type="hidden" id="grupoPlataforma">
+              <input type="hidden" id="grupoCuentaOriginal">
+
+              <div class="form-grid">
+                <div class="input-group">
+                  <label>Nombre del grupo</label>
+                  <input type="text" id="grupoCuenta" placeholder="Ej: Netflix Grupo 1">
+                </div>
+
+                <div class="input-group">
+                  <label>Correo madre / cuenta</label>
+                  <input type="text" id="correoMadre" placeholder="Correo principal">
+                </div>
+
+                <div class="input-group">
+                  <label>Contraseña madre / cuenta</label>
+                  <input type="text" id="contrasenaMadre" placeholder="Contraseña principal">
+                </div>
+
+                <div class="input-group">
+                  <label>Proveedor</label>
+                  <input type="text" id="proveedorGrupo" placeholder="Proveedor">
+                </div>
+
+                <div class="input-group">
+                  <label>Fecha de inicio cuenta</label>
+                  <input type="date" id="fechaInicioGrupo">
+                </div>
+
+                <div class="input-group">
+                  <label>Fecha de corte cuenta</label>
+                  <input type="date" id="fechaCorteGrupo">
+                </div>
+
+                <div class="input-group wide">
+                  <label>Observación del grupo</label>
+                  <textarea id="observacionGrupo" placeholder="Detalle general del grupo"></textarea>
+                </div>
+              </div>
+
+              <div class="spaces-title">
+                <h3>Espacios del grupo</h3>
+                <span id="ayudaEspacios"></span>
+              </div>
+
+              <div id="contenedorEspacios" class="spaces-grid"></div>
+
+              <div class="actions-footer">
+                <button class="btn primary" type="submit" id="btnGuardarGrupo">
+                  Guardar grupo
+                </button>
+
+                <button class="btn secondary" type="button" id="btnCancelarGrupo">
+                  Cancelar
+                </button>
+              </div>
+            </form>
+
+            <p id="msgGrupoPlataforma" class="msg"></p>
+          </div>
+        </article>
+
+        <article class="panel mt">
+          <div class="panel-header">
+            <h3>Grupos registrados</h3>
+            <span>Cada cuenta queda separada visualmente</span>
+          </div>
+
+          <div id="listaGruposPlataformas" class="groups-list"></div>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <script src="/google-script-shim.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
