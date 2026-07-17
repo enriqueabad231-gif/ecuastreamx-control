@@ -1,0 +1,34 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "ecuastreamx-control",
+  "main": "./src/worker.js",
+  "compatibility_date": "2026-07-17",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public/",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ecuastreamx-db",
+      "database_id": "REEMPLAZA_CON_EL_ID_DE_TU_D1"
+    }
+  ],
+  "vars": {
+    "ADMIN_USER": "admin",
+    "SESSION_HOURS": "6"
+  },
+  "secrets": {
+    "required": ["ADMIN_PASSWORD", "DATA_ENCRYPTION_KEY"]
+  },
+  "triggers": {
+    "crons": ["0 6 * * *"]
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 0.1
+  }
+}

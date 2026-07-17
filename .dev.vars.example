@@ -1,0 +1,2 @@
+ADMIN_PASSWORD="cambia-esta-clave"
+DATA_ENCRYPTION_KEY="usa-una-frase-larga-y-unica-de-al-menos-32-caracteres"
